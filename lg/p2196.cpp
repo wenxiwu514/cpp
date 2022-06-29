@@ -7,28 +7,41 @@ const int N = 22;
 
 int a[N], b[N][N], f[N], q[N];
 
-int main(){
+void dfs(int x)
+{
+    if (q[x])
+        dfs(q[x]);
+    printf("%d ", x);
+}
+int main()
+{
     int n;
     scanf("%d", &n);
-    for(int i = 1; i <= n; i ++)
+    for (int i = 1; i <= n; i++)
         scanf("%d", &a[i]);
-    for(int i = 1; i <= n - 1; i ++)
-        for(int j = i + 1; j <= n; j ++)
+    for (int i = 1; i <= n - 1; i++)
+        for (int j = i + 1; j <= n; j++)
             scanf("%d", &b[i][j]);
-    for(int i = 1; i <= n; i ++){
-        for(int j = i + 1; j <= n; j ++){
-            if(b[i][j] && f[i] < f[j] + a[i])
+    int ans = 0, index = 0;
+    for (int i = 1; i <= n; i++)
+    {
+        f[i] = a[i];
+        for (int j = 1; j < i; j++)
+        {
+            if (b[j][i] && f[i] < f[j] + a[i])
+            {
+                f[i] = f[j] + a[i];
                 q[i] = j;
-            f[i] = f[q[i]] + a[i];
+            }
+        }
+        if (f[i] > ans)
+        {
+            ans = f[i];
+            index = i;
         }
     }
-    vector<int> path(1, k);
-    int k = max_element(f, f + n) - f;
-    while(q[k]){
-        k = q[k];
-        path.push_back(k);
-    }
-    reverse(all(path));
-    for(auto i:path)
-        printf("")
+    dfs(index);
+    cout << endl
+         << ans << endl;
+    return 0;
 }
