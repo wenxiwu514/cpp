@@ -27,7 +27,7 @@ int main()
         {
             for (int k = j; k <= j + i - 1; k++)
             {
-                f[j][j + i - 1] = min(f[j][j + i - 1], f[j][k] + f[k + 1][j + i - 1] + s[j][k] + s[k + 1][j + i - 1]);
+                f[j][j + i - 1] = min(f[j][j + i - 1], f[j][k] + f[k + 1][j + i - 1] + s[j][j + i - 1]);
             }
         }
     }
