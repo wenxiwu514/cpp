@@ -48,7 +48,7 @@ int main()
     {
         int a, b, c;
         scanf("%d%d%d", &a, &b, &c);
-        add(a, b, c), add(b, a, c);
+        add(a, b, c);
     }
     dijkstra(s);
     for (int i = 1; i <= n; i++)
