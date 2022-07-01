@@ -1,46 +1,70 @@
-#include <iostream>
-#include <cstring>
+#include <cstdio>
+#include <algorithm>
 using namespace std;
-
-const int N = 110;
-
-int h[N], e[N], ne[N], idx;
-
-void insert(int x, int y)
+int n, ans1, ans2, depth1, depth2;
+int tot, to[202], nxt[202], head[101];
+int fa[101], deep[101], width[101];
+void add(int x, int y)
 {
-    e[idx] = y;
-    ne[idx] = h[x];
-    h[x] = idx++;
+    to[++tot] = y;
+    nxt[tot] = head[x];
+    head[x] = tot;
 }
-int dfs1(int x)
+void dfs(int x, int pre, int step)
 {
-    int p = 1;
-    if (h[x] == -1)
-        return 1;
-    for (int i = h[x]; i != -1; i = ne[i])
+    fa[x] = pre;
+    deep[x] = step;
+    for (int i = head[x]; i; i = nxt[i])
     {
-        int k = dfs1(e[i]);
-        if (k > p)
-            p = k;
+        int y = to[i];
+        dfs(y, x, step + 1);
     }
-    return p + 1;
+}
+void lca(int x, int y)
+{
+    if (deep[x] < deep[y])
+    {
+        swap(x, y);
+        while (deep[x] > deep[y])
+            x = fa[x], depth2++;
+        while (x != y)
+        {
+            x = fa[x], y = fa[y];
+            depth2++;
+            depth1++;
+        }
+    }
+    else
+    {
+        while (deep[x] > deep[y])
+            x = fa[x], depth1++;
+        while (x != y)
+        {
+            x = fa[x], y = fa[y];
+            depth1++;
+            depth2++;
+        }
+    }
 }
 int main()
 {
-    int n;
-    cin >> n;
-    int a, b;
-    memset(h, -1, sizeof(h));
-    for (int i = 1; i < n; i++)
+    scanf("%d", &n);
+    for (int i = 1; i <= n - 1; i++)
     {
+        int a, b;
         scanf("%d%d", &a, &b);
-        insert(a, b);
-        insert(b, a);
+        add(a, b);
     }
-    int c, d;
-    scanf("%d%d", &c, &d);
-    cout << dfs1(1) << endl;
+    dfs(1, 0, 1);
+    for (int i = 1; i <= n; i++)
+        width[deep[i]]++;
+    for (int i = 1; i <= n; i++)
+        ans1 = max(ans1, deep[i]);
+    for (int i = 1; i <= n; i++)
+        ans2 = max(ans2, width[i]);
+    int u, v;
+    scanf("%d%d", &u, &v);
+    lca(u, v);
+    printf("%d\n%d\n%d", ans1, ans2, depth1 * 2 + depth2);
     return 0;
 }
-
-// TODO
